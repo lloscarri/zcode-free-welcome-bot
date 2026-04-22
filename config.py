@@ -27,4 +27,4 @@ WHATSAPP_CHANNEL_URL = os.environ.get(
     "WHATSAPP_CHANNEL_URL",
     "https://whatsapp.com/channel/0029VbC07l4EwEjsVtCH3a0D",
 )
-VIP_BOT_URL = os.environ.get("VIP_BOT_URL", "https://t.me/Bienvenido_Zcode_bot")
+VIP_BOT_URL = os.environ.get("VIP_BOT_URL", "https://t.me/zcode_asistente_bot")

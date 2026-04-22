@@ -28,18 +28,19 @@ def bienvenida_botones() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
         [InlineKeyboardButton("📱 Canal Backup Telegram", url=config.BACKUP_TELEGRAM_URL)],
         [InlineKeyboardButton("📢 ZCode en WhatsApp",    url=config.WHATSAPP_CHANNEL_URL)],
+        [InlineKeyboardButton("🎯 Quiero acceso VIP completo", url=config.VIP_BOT_URL)],
     ])
 
 # ─── Mensaje /vip ────────────────────────────────────────────────────────────
 
 VIP_TEXTO = (
-    "🎯 ¿Listo para probar ZCode VIP GRATIS 7 días\\?\n"
-    "Habla con nuestro asistente aquí 👇"
+    "🎯 ¿Quieres acceso completo a ZCode VIP\\?\n"
+    "Chatea conmigo inmediatamente 👇"
 )
 
 def vip_botones() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("🚀 Probar ZCode VIP Gratis", url=config.VIP_BOT_URL)],
+        [InlineKeyboardButton("🚀 Quiero acceso VIP completo", url=config.VIP_BOT_URL)],
     ])
 
 
