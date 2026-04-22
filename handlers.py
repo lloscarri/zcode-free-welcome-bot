@@ -321,7 +321,7 @@ async def handle_chat_member(update: Update, context: ContextTypes.DEFAULT_TYPE)
         return
 
     entradas = {ChatMember.MEMBER, ChatMember.ADMINISTRATOR}
-    salidas  = {ChatMember.LEFT, ChatMember.KICKED, ChatMember.BANNED, ChatMember.RESTRICTED}
+    salidas  = {ChatMember.LEFT, ChatMember.BANNED, ChatMember.RESTRICTED}
 
     if old_status in salidas and new_status in entradas:
         firstname = user.first_name or "amigo"
