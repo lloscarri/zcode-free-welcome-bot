@@ -4,10 +4,10 @@ Detecta nuevos miembros en el canal Free y les da bienvenida.
 """
 import logging
 
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
+from telegram.ext import ApplicationBuilder, ChatMemberHandler, CommandHandler
 
 import config
-from handlers import handle_new_member, handle_vip
+from handlers import handle_chat_member, handle_vip
 
 # ─── Logging ─────────────────────────────────────────────────────────────────
 
@@ -23,18 +23,24 @@ logger = logging.getLogger(__name__)
 def main() -> None:
     logger.info("Iniciando ZCode Free Welcome Bot...")
 
-    app = ApplicationBuilder().token(config.BOT_TOKEN).build()
-
-    # Nuevos miembros en el canal/grupo
-    app.add_handler(
-        MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, handle_new_member)
+    app = (
+        ApplicationBuilder()
+        .token(config.BOT_TOKEN)
+        .build()
     )
+
+    # Detectar cambios de membresía en el canal (join/leave)
+    # ChatMemberHandler.CHAT_MEMBER = updates del canal donde el bot es admin
+    app.add_handler(ChatMemberHandler(handle_chat_member, ChatMemberHandler.CHAT_MEMBER))
 
     # Comando /vip en privado
     app.add_handler(CommandHandler("vip", handle_vip))
 
-    logger.info("Bot corriendo. Esperando actualizaciones (polling)...")
-    app.run_polling(drop_pending_updates=True)
+    logger.info("Bot corriendo. Canal ID: %s", config.CHANNEL_ID)
+    app.run_polling(
+        drop_pending_updates=True,
+        allowed_updates=["chat_member", "message"],  # solo los eventos que necesitamos
+    )
 
 
 if __name__ == "__main__":

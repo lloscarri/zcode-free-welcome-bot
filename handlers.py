@@ -6,7 +6,7 @@ Handlers del bot ZCode Free Welcome.
 import logging
 from datetime import datetime
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import Chat, ChatMember, InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
 import config
@@ -43,22 +43,34 @@ def vip_botones() -> InlineKeyboardMarkup:
     ])
 
 
-# ─── Handler: nuevo miembro en el canal ─────────────────────────────────────
+# ─── Handler: nuevo miembro en el canal (ChatMemberUpdated) ──────────────────
 
-async def handle_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def handle_chat_member(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
-    Se dispara cuando alguien entra al canal.
-    Funciona con message.new_chat_members (el método más fiable para canales/grupos).
+    Se dispara cuando el status de un miembro cambia en el canal.
+    Funciona tanto en canales como en grupos.
     """
-    message = update.message
-    if not message or not message.new_chat_members:
+    result = update.chat_member
+    if not result:
         return
 
-    for user in message.new_chat_members:
-        # Ignorar cuando el propio bot entra
-        if user.is_bot:
-            continue
+    # Solo el canal configurado
+    if result.chat.id != config.CHANNEL_ID:
+        return
 
+    old_status = result.old_chat_member.status
+    new_status = result.new_chat_member.status
+    user = result.new_chat_member.user
+
+    # Ignorar bots
+    if user.is_bot:
+        return
+
+    # Detectar entrada: viene de kicked/left/banned → member/administrator
+    entradas = {ChatMember.MEMBER, ChatMember.ADMINISTRATOR}
+    salidas = {ChatMember.LEFT, ChatMember.KICKED, ChatMember.BANNED, ChatMember.RESTRICTED}
+
+    if old_status in salidas and new_status in entradas:
         firstname = user.first_name or "amigo"
         texto = BIENVENIDA_TEXTO.format(firstname=firstname)
 
@@ -89,7 +101,6 @@ async def handle_vip(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     if not update.message:
         return
 
-    # Solo en privado
     if update.message.chat.type != "private":
         return
 
