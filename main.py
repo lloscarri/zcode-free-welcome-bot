@@ -18,6 +18,7 @@ import config
 from handlers import (
     handle_chat_member,
     handle_vip,
+    handle_start,
     handle_menu,
     handle_callback,
     handle_cancelar,
@@ -49,7 +50,8 @@ def main() -> None:
     app.add_handler(ChatMemberHandler(handle_chat_member, ChatMemberHandler.CHAT_MEMBER))
 
     # ── Comandos públicos ─────────────────────────────────────────────────────
-    app.add_handler(CommandHandler("vip", handle_vip))
+    app.add_handler(CommandHandler("start", handle_start))
+    app.add_handler(CommandHandler("vip",   handle_vip))
 
     # ── Panel de admin ────────────────────────────────────────────────────────
     app.add_handler(CommandHandler("menu",     handle_menu))

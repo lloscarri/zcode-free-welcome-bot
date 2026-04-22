@@ -105,6 +105,28 @@ def _menu_keyboard() -> InlineKeyboardMarkup:
     ])
 
 
+async def handle_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """/start — muestra el panel de admin si es el admin, CTA VIP si es usuario normal."""
+    if not update.message or update.message.chat.type != "private":
+        return
+    chat_id = update.message.chat.id
+    if _is_admin(chat_id):
+        _editing.pop(chat_id, None)
+        await update.message.reply_text(
+            "⚙️ *Panel de administración — ZCode Free Welcome Bot*\n\nElige qué quieres hacer:",
+            parse_mode="MarkdownV2",
+            reply_markup=_menu_keyboard(),
+        )
+    else:
+        await update.message.reply_text(
+            "🎯 ¿Quieres acceso completo a ZCode VIP\\?\nChatea conmigo inmediatamente 👇",
+            parse_mode="MarkdownV2",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("🚀 Quiero acceso VIP completo", url=config.VIP_BOT_URL)
+            ]]),
+        )
+
+
 async def handle_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """/menu — abre el panel de administración."""
     if not update.message or update.message.chat.type != "private":
