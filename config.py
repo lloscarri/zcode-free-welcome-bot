@@ -28,3 +28,10 @@ WHATSAPP_CHANNEL_URL = os.environ.get(
     "https://whatsapp.com/channel/0029VbC07l4EwEjsVtCH3a0D",
 )
 VIP_BOT_URL = os.environ.get("VIP_BOT_URL", "https://t.me/zcode_asistente_bot")
+
+# Admin: ID numérico del admin (para /preview y /setbanner)
+ADMIN_CHAT_ID = int(os.environ.get("ADMIN_CHAT_ID", "0"))
+
+# Banner: file_id de Telegram del banner de bienvenida (opcional)
+# Si está vacío, el mensaje de bienvenida se envía sin imagen
+BANNER_FILE_ID = os.environ.get("BANNER_FILE_ID", "")
